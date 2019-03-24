@@ -1,7 +1,10 @@
 // user/login user/register
 
-const express = require("express")
+const express = require("express");
 const router = express.Router();
+
+//Passport 
+const passport = require('passport');
 
 //Encrypt Password
 
@@ -85,11 +88,19 @@ router.post("/register",(req,res)=>{
                         })
                         .catch(err => console.log(err))
                    }))
-                
               }
           })   
-    }
-   
+    } 
 })
 
-module.exports = router;
+router.post("/login",(req,res,next) => {
+
+   passport.authenticate('local',{
+        successRedirect: '/dashboard',
+        failureRedirect: '/users/login',
+         failureFlash: true 
+   })(req,res,next);
+
+});
+
+module.exports = router;    

@@ -103,4 +103,12 @@ router.post("/login",(req,res,next) => {
 
 });
 
+//Logout handle 
+
+router.get("/logout",(req,res)=>{
+    req.logout(); //Passport provides flash logout functions
+    req.flash("success_msg","You are logged out");
+    res.redirect("/users/login");
+});
+
 module.exports = router;    

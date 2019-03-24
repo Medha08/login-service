@@ -8,12 +8,18 @@ const mongoose = require("mongoose");
 const flash = require("connect-flash");//stores messages in session so require(express-session)
 const session = require("express-session");
 
+const passport = require('passport')
+
 const routesHome = require("./routes/index");
 const routesUser = require("./routes/user");
 
 const expressLayouts = require("express-ejs-layouts");
 
-//DB
+//Passport Config
+
+require('./config/passport')(passport);
+
+//DB Config
 const db = require("./config/keys").MongoURI;
 
 //Connect To Database
@@ -38,6 +44,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true
   }))
+
+//Passport MiddleWare 
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Connect Flash
 

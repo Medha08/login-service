@@ -4,6 +4,10 @@ const PORT = process.env.PORT || 8080;
 
 const mongoose = require("mongoose");
 
+//Flash Messages
+const flash = require("connect-flash");//stores messages in session so require(express-session)
+const session = require("express-session");
+
 const routesHome = require("./routes/index");
 const routesUser = require("./routes/user");
 
@@ -27,6 +31,26 @@ app.set('view engine','ejs');
 
 //BodyParser
 app.use(express.urlencoded({extended: false }))
+
+//Express Session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true
+  }))
+
+//Connect Flash
+
+app.use(flash());
+
+//Global Vars
+
+//Adding custom middleware to form global vars
+app.use((req,res,next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+})
 
 //Routes Home
 app.use("/",routesHome);
